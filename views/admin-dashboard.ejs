@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }body{
+            width: 100vw;
+            padding: 0;
+            background-color: #272525;
+        }
+        .header{
+            background-color: #007bff;
+            display: flex;
+            padding: 0 2em ;
+            justify-content: flex-end;
+            gap: 30rem;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 2em;
+            color: white ;
+            font-weight: 600;
+            position: relative;
+            height: 90px;
+            border-radius: 0 0 1em 1em;
+        }
+        .profile{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid black;
+            background-color: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }.profile img{
+            width: 98%;
+            height: 98%;
+            border-radius: 50%;
+        }#popup{
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            z-index: 5;
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            top:72px;
+            right: 20px;
+            border-radius: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span>Admin Dashboard</span>
+        <a class="profile"  onclick="addBox(event)">
+            <img src="profile.png" alt="profile">
+        </a>
+        <form  id="popup" action="/logout" method="get">
+            <button type="submit" class="btn logout-btn">Logout</button>
+        </form>
+    </div>
+    <div class="grid-container">
+        <!-- New Event Form -->
+
+        <% events.forEach(event => { %>
+        <div class="grid-item">
+            <div class="content">
+                <h3><%= event.name %></h3>
+                <p><%= event.date %> at <%= event.time %></p>
+                <p>Venue: <%= event.venue %></p>
+                <p>Team Limit: <%= event.team_limit %></p>
+                <p><%= event.description %></p>
+                <form action="/delete-event" method="post" style="display:inline;">
+                    <input type="hidden" name="eventId" value="<%= event.id %>">
+                    <button type="submit" class="btn" style="background-color: #dc3545;">Delete Event</button>
+                </form>
+                <a href="/edit-event/<%= event.id %>" class="btn" style="background-color: #ffc107;">Edit Event</a>
+            </div>
+        </div>
+        <% }); %>
+        <div class="grid-item">
+            <div class="content">
+                <h3>Add New Event</h3>
+                <a href="/add-event" class="btn">Add Event</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function addBox(ev) {
+            ev.preventDefault(); // Prevent any default anchor behavior
+            const popup = document.getElementById("popup");
+            // Check if the popup exists before trying to modify it
+            if (popup) {
+                // Log to verify the function is being called
+                console.log("Popup clicked");
+                popup.style.display = popup.style.display === "none" ? "flex" : "none";
+            } else {
+                console.log("Popup element not found");
+            }
+        }
+    </script>
+</body>
+</html>
